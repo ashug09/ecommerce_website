@@ -1,16 +1,22 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import Router from "next/router";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Nav() {
-  const items = useSelector((state) => state.cart.items);
+  const { data: session } = useSession();
   const amount = useSelector((state) => state.cart.amount);
   const count = useSelector((state) => state.cart.count);
+  // let items = useSelector((state)=>state.cart.items)
   return (
     <div>
       <div className="navbar bg-base-100">
         <div className="flex-1">
-          <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
+          <button
+            onClick={() => Router.push("/", undefined, { shallow: true })}
+          >
+            <a className="btn btn-ghost normal-case text-xl">Mady STORE</a>
+          </button>
         </div>
         <div className="flex-none">
           <div className="dropdown dropdown-end">
@@ -56,7 +62,11 @@ export default function Nav() {
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
-                <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                {session ? (
+                  <img src={session.user.image} />
+                ) : (
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSegCgK5aWTTuv_K5TPd10DcJxphcBTBct6R170EamgcCOcYs7LGKVy7ybRc-MCwOcHljg&usqp=CAU" />
+                )}
               </div>
             </label>
             <ul
@@ -64,16 +74,35 @@ export default function Nav() {
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <a className="justify-between">
-                  Profile
-                  <span className="badge">New</span>
-                </a>
+                <button
+                  onClick={() => {
+                    Router.push("/profile", undefined, { shallow: true });
+                  }}
+                >
+                  <a className="justify-between">
+                    Profile
+                    <span className="badge">New</span>
+                  </a>
+                </button>
               </li>
               <li>
                 <a>Settings</a>
               </li>
               <li>
-                <a>Logout</a>
+                <a>
+                  {session ? `Hello! ${session.user.name}` : "Hello There !!"}
+                </a>
+              </li>
+              <li>
+                {session ? (
+                  <button onClick={() => signOut()}>
+                    <a>Sign Out</a>
+                  </button>
+                ) : (
+                  <button onClick={() => signIn()}>
+                    <a>Login</a>
+                  </button>
+                )}
               </li>
             </ul>
           </div>
