@@ -3,7 +3,7 @@ import {
   PaymentElement,
   LinkAuthenticationElement,
   useStripe,
-  useElements
+  useElements,
 } from "@stripe/react-stripe-js";
 import Nav from "./nav";
 
@@ -11,7 +11,7 @@ export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
-  const [email, setEmail] = React.useState('');
+  const [email, setEmail] = React.useState("");
   const [message, setMessage] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -61,7 +61,8 @@ export default function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "https://seventh-nextjs-new-01-ashug09.vercel.app/paymentsuccess"
+        return_url: "https://ecommerce-seven-murex.vercel.app/paymentsuccess",
+        // return_url: "https://seventh-nextjs-new-01-ashug09.vercel.app/paymentsuccess"
         // return_url: "`http://localhost:3000/paymentsuccess"
       },
     });
@@ -86,22 +87,33 @@ export default function CheckoutForm() {
 
   return (
     <>
-    <Nav/>
-    <form className="mt-4 w-72 md:w-80 lg:w-96 mx-auto" id="payment-form" onSubmit={handleSubmit}>
-      <LinkAuthenticationElement
-        id="link-authentication-element"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <PaymentElement id="payment-element" options={paymentElementOptions} />
-      <button className="w-full mt-4 btn" disabled={isLoading || !stripe || !elements} id="submit">
-        <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
-        </span>
-      </button>
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
-    </form>
+      <Nav />
+      <form
+        className="mt-4 w-72 md:w-80 lg:w-96 mx-auto"
+        id="payment-form"
+        onSubmit={handleSubmit}
+      >
+        <LinkAuthenticationElement
+          id="link-authentication-element"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <PaymentElement id="payment-element" options={paymentElementOptions} />
+        <button
+          className="w-full mt-4 btn"
+          disabled={isLoading || !stripe || !elements}
+          id="submit"
+        >
+          <span id="button-text">
+            {isLoading ? (
+              <div className="spinner" id="spinner"></div>
+            ) : (
+              "Pay now"
+            )}
+          </span>
+        </button>
+        {/* Show any error or success messages */}
+        {message && <div id="payment-message">{message}</div>}
+      </form>
     </>
-    
   );
 }
