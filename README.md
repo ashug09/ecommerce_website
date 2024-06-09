@@ -1,7 +1,3 @@
-Sure, here's the updated description including Redux in the technologies used:
-
----
-
 ## Mady Store - Next.js E-Commerce Store with Firebase Authentication and Stripe Integration
 
 ### Overview
